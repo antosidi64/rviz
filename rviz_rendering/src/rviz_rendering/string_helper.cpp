@@ -70,3 +70,40 @@ std::vector<std::string> rviz_rendering::string_helper::splitStringIntoTrimmedIt
   }
   return filenames;
 }
+
+std::string rviz_rendering::string_helper::joinStrings(
+  const std::vector<std::string> & items, const std::string & delimiter)
+{
+  if (items.empty()) {
+    return "";
+  }
+  std::string result;
+  size_t total_size = delimiter.size() * (items.size() - 1);
+  for (const auto & item : items) {
+    total_size += item.size();
+  }
+  result.reserve(total_size);
+
+  for (size_t i = 0; i < items.size(); ++i) {
+    result += items[i];
+    if (i + 1 < items.size()) {
+      result += delimiter;
+    }
+  }
+  return result;
+}
+
+std::vector<std::pair<std::string, std::string>> rviz_rendering::string_helper::parseConfigPairs(
+  std::string raw_config)
+{
+  std::vector<std::pair<std::string, std::string>> tmp123;
+  auto tokens = splitStringIntoTrimmedItems(raw_config, ';');
+  for (auto t : tokens) {
+    size_t eq_pos = t.find('=');
+    std::string key = t.substr(0, eq_pos);
+    std::string val = t.substr(eq_pos + 1);
+    tmp123.push_back({key, val});
+  }
+  return tmp123;
+}
+
