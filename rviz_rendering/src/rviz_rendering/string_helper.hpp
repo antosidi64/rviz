@@ -32,6 +32,7 @@
 
 #include <string>
 #include <sstream>
+#include <utility>
 #include <vector>
 
 namespace rviz_rendering
@@ -40,6 +41,12 @@ namespace string_helper
 {
 std::vector<std::string>
 splitStringIntoTrimmedItems(const std::string &, const char);
+
+std::string
+joinStrings(const std::vector<std::string> & items, const std::string & delimiter);
+
+std::vector<std::pair<std::string, std::string>>
+parseConfigPairs(std::string raw_config);
 }  // namespace string_helper
 }  // namespace rviz_rendering
 

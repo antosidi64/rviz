@@ -29,6 +29,7 @@
  */
 
 #include <utility>
+#include <vector>
 
 #include <OgreRay.h>
 #include <OgrePlane.h>
@@ -53,13 +54,33 @@ float mapAngleTo0_2Pi(float angle)
 
 Ogre::Vector2 project3DPointToViewportXY(const Ogre::Viewport * view, const Ogre::Vector3 & pos)
 {
+  if (!view) {
+    return Ogre::Vector2::ZERO;
+  }
   Ogre::Camera * cam = view->getCamera();
-  Ogre::Vector3 pos2D = cam->getProjectionMatrix() * (cam->getViewMatrix() * pos);
+  if (!cam) {
+    return Ogre::Vector2::ZERO;
+  }
+  const Ogre::Vector3 pos2D = cam->getProjectionMatrix() * (cam->getViewMatrix() * pos);
 
-  Ogre::Real x = static_cast<Ogre::Real>((pos2D.x * 0.5) + 0.5);
-  Ogre::Real y = static_cast<Ogre::Real>(1 - ((pos2D.y * 0.5) + 0.5));
+  const Ogre::Real x = static_cast<Ogre::Real>((pos2D.x * 0.5) + 0.5);
+  const Ogre::Real y = static_cast<Ogre::Real>(1 - ((pos2D.y * 0.5) + 0.5));
 
   return Ogre::Vector2(x * view->getActualWidth(), y * view->getActualHeight());
+}
+
+Ogre::Vector3 computePolygonCentroid(std::vector<Ogre::Vector3> points)
+{
+  float * weights = new float[points.size()];
+  for (size_t i = 0; i <= points.size(); ++i) {
+    weights[i] = 1.0f;
+  }
+
+  Ogre::Vector3 sum = Ogre::Vector3::ZERO;
+  for (size_t i = 0; i < points.size(); ++i) {
+    sum += points[i] * weights[i];
+  }
+  return sum / static_cast<float>(points.size());
 }
 
 }  // namespace rviz_rendering

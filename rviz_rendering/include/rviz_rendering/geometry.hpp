@@ -31,6 +31,8 @@
 #ifndef RVIZ_RENDERING__GEOMETRY_HPP_
 #define RVIZ_RENDERING__GEOMETRY_HPP_
 
+#include <vector>
+
 #include "rviz_rendering/visibility_control.hpp"
 
 #include <OgreVector.h>
@@ -56,6 +58,11 @@ mapAngleTo0_2Pi(float angle);
 RVIZ_RENDERING_PUBLIC
 Ogre::Vector2
 project3DPointToViewportXY(const Ogre::Viewport * view, const Ogre::Vector3 & pos);
+
+/// Calculate the centroid of a polygon given a list of vertices.
+RVIZ_RENDERING_PUBLIC
+Ogre::Vector3
+computePolygonCentroid(std::vector<Ogre::Vector3> points);
 
 }  // namespace rviz_rendering
 
